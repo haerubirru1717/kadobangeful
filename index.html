@@ -1865,28 +1865,21 @@ body.chat-active .letter-paper {
 }
 .volume-toast-icon { font-size: 1.1rem; }
 
-#voucher-expired-toast {
-  position: fixed;
-  left: 50%;
-  bottom: 2rem;
-  z-index: 1000;
-  max-width: calc(100vw - 2rem);
-  padding: 0.8rem 1rem;
-  border: 1px solid rgba(255, 180, 80, 0.55);
-  border-radius: 8px;
-  background: #5c2d0a;
-  color: #fff4df;
-  font-size: 0.78rem;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(-50%) translateY(16px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+.voucher-expired-warning {
+  margin-top: 0.65rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #ff6b6b;
+  border-radius: 6px;
+  background: #3b0b0b;
+  color: #ffdede;
+  font-size: 0.72rem;
+  line-height: 1.45;
 }
-#voucher-expired-toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+.voucher-expired-warning strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: #fff;
+  font-size: 0.75rem;
 }
 
 /* ══════════════════════════════
@@ -2283,10 +2276,6 @@ body.chat-active .letter-paper {
 <div id="volume-toast">
   <span class="volume-toast-icon">🔔</span>
   Aktifkan volume untuk pengalaman terbaik
-</div>
-
-<div id="voucher-expired-toast" role="status" aria-live="polite">
-  Link telah mati, kemungkinan karena voucher kedaluwarsa.
 </div>
 
 <!-- ══════════════════════════════
@@ -3049,11 +3038,12 @@ function buildVoucherCard(brand, cfg, idx) {
 }
 
 function claimVoucher(btn) {
-  const toast = document.getElementById('voucher-expired-toast');
-  toast.classList.remove('show');
-  requestAnimationFrame(() => toast.classList.add('show'));
-  clearTimeout(window._voucherExpiredToastTimer);
-  window._voucherExpiredToastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+  document.querySelector('.voucher-expired-warning')?.remove();
+  const warning = document.createElement('div');
+  warning.className = 'voucher-expired-warning';
+  warning.setAttribute('role', 'alert');
+  warning.innerHTML = '<strong>⚠ Link voucher tidak aktif</strong>Kemungkinan voucher telah kedaluwarsa.';
+  btn.insertAdjacentElement('afterend', warning);
 }
 
 // ── Q&A Panel ──
